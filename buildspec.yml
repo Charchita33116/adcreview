@@ -1,0 +1,29 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Install dependencies if needed"
+      - npm install  # Only if you're using Node.js or other dependencies. Otherwise, you can skip this.
+
+  pre_build:
+    commands:
+      - echo "Preparing the environment"
+      - npm run lint  # Optional: Run linting or other pre-build tasks. Remove if not necessary.
+
+  build:
+    commands:
+      - echo "Building the project"
+      - npm run build  # If you're using any build tool or bundler (like Webpack), this command will execute it.
+      - echo "Minifying files (if required)"
+      - # Add any additional build commands like minification or Sass to CSS conversion here.
+
+  post_build:
+    commands:
+      - echo "Post-build phase"
+      - aws s3 sync ./dist s3://your-bucket-name --delete  # Sync build files to S3, replace `your-bucket-name` with your actual S3 bucket name.
+
+artifacts:
+  files:
+    - '**/*'  # Include all files in the project (HTML, CSS, JS, etc.)
+  discard-paths: yes
